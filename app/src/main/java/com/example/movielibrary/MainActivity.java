@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import java.util.ArrayList;
@@ -60,10 +59,8 @@ public class MainActivity extends AppCompatActivity {
                 moviesList.clear();
                 movieAdapter.notifyItemRangeRemoved(0, size);
                 status = !tb.isChecked();
-                Toast.makeText(v.getContext(), "STATUS is "+status, Toast.LENGTH_LONG).show();
-
+//                Toast.makeText(v.getContext(), "STATUS is "+status, Toast.LENGTH_LONG).show();
                 moviesList.addAll(db.getMovies(status));
-
                 recycler.setAdapter(movieAdapter);
             }
         });

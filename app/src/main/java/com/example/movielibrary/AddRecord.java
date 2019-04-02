@@ -12,6 +12,7 @@ import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class AddRecord extends AppCompatActivity {
+    static int i=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,7 @@ public class AddRecord extends AppCompatActivity {
                 EditText editDescription = findViewById(R.id.description);
                 RatingBar editRating = findViewById(R.id.rating);
 
-                Movies movie = new Movies(
+                Movies movie = new Movies(i++,
                         editName.getText().toString(),
                         editDescription.getText().toString(),
                         (int) editRating.getRating(),

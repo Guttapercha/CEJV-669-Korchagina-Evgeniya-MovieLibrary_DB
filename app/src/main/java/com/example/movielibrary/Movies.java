@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Movies implements Serializable {
 
-    public  static final String TABLE_NAME = "mm";
+    public  static final String TABLE_NAME = "test1";
 
     public  static final String COLUMN_ID = "movie_id";
     public  static final String COLUMN_NAME = "movie_name";
@@ -50,13 +50,14 @@ public class Movies implements Serializable {
         isActive = active;
     }
 
-    public Movies(String movieName, String description, int movieRating, boolean isActive) {
+    public Movies(int i, String movieName, String description, int movieRating, boolean isActive) {
         this.movieName = movieName;
         this.movieRating = movieRating;
         this.description = description;
         this.isActive = isActive;
-        this.last_movieID++;
-        this.movieID = this.last_movieID;
+//        this.last_movieID++;
+//        this.movieID = this.last_movieID;
+        this.movieID = i;
     }
 
     @Override

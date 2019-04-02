@@ -43,7 +43,7 @@ public class DBClass extends SQLiteOpenHelper {
 //    }
 
 
-    public void updateMovieByStatus(int movieId, String movieName, String movieDescription, int movieRating, boolean movieStatus) {
+    public void updateMovie(int movieId, String movieName, String movieDescription, int movieRating, boolean movieStatus) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -55,7 +55,9 @@ public class DBClass extends SQLiteOpenHelper {
         cv.put(Movies.COLUMN_STATUS, movieStatus ? 1 : 0);
 
         db.update(Movies.TABLE_NAME, cv, Movies.COLUMN_ID + "=?", new String[]{String.valueOf(movieId)});
+
     }
+
 
 //    public  Movies getMovie (int movieId) {
 //        SQLiteDatabase db = getReadableDatabase();

@@ -55,6 +55,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final MovieAdapter.MyViewHolder viewHolder, final int i) {
+
         final Movies movie = movieslist.get(i);
 
         viewHolder.name.setText(movie.getMovieName());
@@ -69,26 +70,34 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             @Override
             public void onClick(View v) {
 
+                removeItem(i);
+
                 DBClass dbc = new DBClass(v.getContext());
 
-                dbc.updateMovieByStatus(movie.getMovieID(), movie.getMovieName(), movie.getDescription(), movie.getMovieRating(), false);
+                dbc.updateMovie(movie.getMovieID(), movie.getMovieName(), movie.getDescription(), movie.getMovieRating(), false);
 
-                viewHolder.btnDelete.setVisibility(View.GONE);
+            }
+        });
+
+
+        viewHolder.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromTouch) {
+
+                if (movie.isActive()) {
+
+                    DBClass dbc = new DBClass(ratingBar.getContext());
+
+                    dbc.updateMovie(movie.getMovieID(), movie.getMovieName(), movie.getDescription(), (int)rating, movie.isActive());
+
+                    Toast.makeText(ratingBar.getContext(), "RATING CHANGED!", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
 
 
-//        viewHolder.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-//
-//            @Override
-//            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromTouch) {
-//                movieslist.get(i).setMovieRating((int)rating);
-//                movieslist.set(i,  movieslist.get(i));
-//                notifyDataSetChanged();
-//                Toast.makeText(ratingBar.getContext(), "RATING CHANGED!", Toast.LENGTH_LONG).show();
-//            }
-//        });
 
     private void removeItem(int position) {
         movieslist.remove(position);
