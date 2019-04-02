@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public class Movies implements Serializable {
 
-    public  static final String TABLE_NAME = "test1";
+    public  static final String TABLE_NAME = "moviedb";
 
     public  static final String COLUMN_ID = "movie_id";
     public  static final String COLUMN_NAME = "movie_name";

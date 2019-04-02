@@ -1,6 +1,5 @@
 package com.example.movielibrary;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
+
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder>{
@@ -21,7 +22,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         TextView id, name, description, status;
         RatingBar rating;
         ImageButton btnDelete;
-
 
         MyViewHolder (final View view) {
             super(view);
@@ -66,16 +66,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
         viewHolder.status.setText(!movie.isActive() ? "deleted": "");
         viewHolder.btnDelete.setVisibility(!movie.isActive() ? View.GONE: View.VISIBLE);
 
+
+
         viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 removeItem(i);
 
                 DBClass dbc = new DBClass(v.getContext());
 
                 dbc.updateMovie(movie.getMovieID(), movie.getMovieName(), movie.getDescription(), movie.getMovieRating(), false);
-
             }
         });
 
