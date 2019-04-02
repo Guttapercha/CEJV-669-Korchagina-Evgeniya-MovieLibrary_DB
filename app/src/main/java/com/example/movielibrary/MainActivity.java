@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,15 @@ public class MainActivity extends AppCompatActivity {
 
     private List<Movies> moviesList = new ArrayList<>();
     MovieAdapter movieAdapter;
+    boolean status = true;
+    ToggleButton tb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recycler = findViewById(R.id.recycle);
+        final RecyclerView recycler = findViewById(R.id.recycle);
         movieAdapter = new MovieAdapter(moviesList);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
@@ -33,8 +36,10 @@ public class MainActivity extends AppCompatActivity {
 
         recycler.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
-        DBClass db = new DBClass(this);
-        moviesList.addAll(db.getMovies());
+        final DBClass db = new DBClass(this);
+        tb = findViewById(R.id.toggleButton);
+        status = !tb.isChecked();
+        moviesList.addAll(db.getMovies(status));
 
         recycler.setAdapter(movieAdapter);
 
@@ -43,11 +48,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getApplicationContext(), AddRecord.class);
-                startActivityForResult(i, 0);
+                startActivity(i);
             }
         });
 
-    }
+
+        tb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int size = moviesList.size();
+                moviesList.clear();
+                movieAdapter.notifyItemRangeRemoved(0, size);
+                status = !tb.isChecked();
+                Toast.makeText(v.getContext(), "STATUS is "+status, Toast.LENGTH_LONG).show();
+
+                moviesList.addAll(db.getMovies(status));
+
+                recycler.setAdapter(movieAdapter);
+            }
+        });
+
+            }
 }
 
 

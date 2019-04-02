@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.widget.ToggleButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,12 +43,12 @@ public class DBClass extends SQLiteOpenHelper {
 //    }
 
 
-    public void updateMovie(int movieId, String movieName, String movieDescription, int movieRating, boolean movieStatus) {
+    public void updateMovieByStatus(int movieId, String movieName, String movieDescription, int movieRating, boolean movieStatus) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues cv = new ContentValues();
-//        cv.put(Movies.COLUMN_ID, movieId);
+        cv.put(Movies.COLUMN_ID, movieId);
         cv.put(Movies.COLUMN_NAME, movieName);
         cv.put(Movies.COLUMN_DESCRIPTION, movieDescription);
         cv.put(Movies.COLUMN_RATING, movieRating);
@@ -78,8 +79,9 @@ public class DBClass extends SQLiteOpenHelper {
 //        return foundMovie;
 //    }
 
-    public List<Movies> getMovies(){
+    public List<Movies> getMovies(boolean status){
         SQLiteDatabase db = getReadableDatabase();
+
         String selectQuery = "select * from " + Movies.TABLE_NAME;
 
         Cursor c = db.rawQuery(selectQuery, null);
@@ -95,7 +97,13 @@ public class DBClass extends SQLiteOpenHelper {
                 foundMovie.movieRating = c.getInt(c.getColumnIndex(Movies.COLUMN_RATING));
                 foundMovie.isActive = c.getInt(c.getColumnIndex(Movies.COLUMN_STATUS)) == 1 ? true : false;
 
-                movieList.add(foundMovie);
+                if (status) {
+                    if (foundMovie.isActive) {
+                        movieList.add(foundMovie);
+                    }
+                } else {
+                    movieList.add(foundMovie);
+                }
 
             } while (c.moveToNext());
         }

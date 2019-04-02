@@ -5,13 +5,14 @@ import java.util.Objects;
 
 public class Movies implements Serializable {
 
-    public  static final String TABLE_NAME = "movies";
+    public  static final String TABLE_NAME = "mm";
 
     public  static final String COLUMN_ID = "movie_id";
     public  static final String COLUMN_NAME = "movie_name";
     public  static final String COLUMN_DESCRIPTION = "movie_description";
     public  static final String COLUMN_RATING = "movie_rating";
     public  static final String COLUMN_STATUS = "movie_status";
+
 
     public static final String CREATE_TABLE =
             "CREATE TABLE " + TABLE_NAME + " (" +

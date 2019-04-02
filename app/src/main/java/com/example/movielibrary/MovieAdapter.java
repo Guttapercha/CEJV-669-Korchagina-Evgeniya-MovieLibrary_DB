@@ -1,23 +1,15 @@
 package com.example.movielibrary;
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ToggleButton;
-
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder>{
@@ -26,7 +18,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView id, name, description;
+        TextView id, name, description, status;
         RatingBar rating;
         ImageButton btnDelete;
 
@@ -38,6 +30,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
             id = view.findViewById(R.id.movieID);
             description = view.findViewById(R.id.movieDescription);
             rating = view.findViewById(R.id.movieRating);
+            status = view.findViewById(R.id.movieStatus);
             btnDelete = view.findViewById(R.id.btn_detete_record);
         }
     }
@@ -50,6 +43,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View itemView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.movie_row, viewGroup, false);
+
         return new MyViewHolder(itemView);
     }
 
@@ -63,44 +57,26 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
     public void onBindViewHolder(@NonNull final MovieAdapter.MyViewHolder viewHolder, final int i) {
         final Movies movie = movieslist.get(i);
 
-
         viewHolder.name.setText(movie.getMovieName());
         viewHolder.description.setText(movie.getDescription());
         viewHolder.id.setText(String.valueOf(movie.getMovieID()));
         viewHolder.rating.setNumStars(5);
         viewHolder.rating.setRating(movie.getMovieRating());
+        viewHolder.status.setText(!movie.isActive() ? "deleted": "");
+        viewHolder.btnDelete.setVisibility(!movie.isActive() ? View.GONE: View.VISIBLE);
 
-//        viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-////                removeItem(i);
-//                movie.getMovieID();
-//                movie.setActive(false);
-////                DBClass dbc = new DBClass(getApplicationContext());
-////                EditText editId = findViewById(R.id.emp_id_to_update);
-////                EditText editFirst = findViewById(R.id.empfn_to_update);
-////                EditText editLast = findViewById(R.id.empln_to_update);
-////                ToggleButton toggleIns = findViewById(R.id.toggleButton2);
-////
-////                Integer empId = Integer.valueOf(editId.getText().toString());
-////
-////                dbc.updateEmployee(empId, editFirst.getText().toString(), editLast.getText().toString(), toggleIns.isChecked());
-////
-////                Toast.makeText(getApplicationContext(), "Record updated!", Toast.LENGTH_LONG).show();
-//            }
-//        });
-//        viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                removeItem(i);
-//                Toast.makeText(v.getContext(), "movie #"+movie.getMovieID()+ " deleted", Toast.LENGTH_LONG).show();
-//            }
-//        });
+        viewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                DBClass dbc = new DBClass(v.getContext());
+
+                dbc.updateMovieByStatus(movie.getMovieID(), movie.getMovieName(), movie.getDescription(), movie.getMovieRating(), false);
+
+                viewHolder.btnDelete.setVisibility(View.GONE);
+            }
+        });
     }
-
-
 
 
 //        viewHolder.rating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -114,6 +90,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MyViewHolder
 //            }
 //        });
 
+    private void removeItem(int position) {
+        movieslist.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, movieslist.size());
+    }
 
 }
 
